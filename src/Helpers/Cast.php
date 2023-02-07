@@ -7,11 +7,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace WikibaseSolutions\CypherDSL\Traits;
+namespace WikibaseSolutions\CypherDSL\Helpers;
 
 use WikibaseSolutions\CypherDSL\Expressions\Literals\Literal;
 use WikibaseSolutions\CypherDSL\Expressions\Variable;
 use WikibaseSolutions\CypherDSL\Patterns\Pattern;
+use WikibaseSolutions\CypherDSL\Traits\ErrorTrait;
 use WikibaseSolutions\CypherDSL\Types\AnyType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\ListType;
 use WikibaseSolutions\CypherDSL\Types\CompositeTypes\MapType;
@@ -23,11 +24,11 @@ use WikibaseSolutions\CypherDSL\Types\PropertyTypes\StringType;
 use WikibaseSolutions\CypherDSL\Types\StructuralTypes\StructuralType;
 
 /**
- * Helper trait for casting native PHP types to Cypher-DSL types. Casts are added to this class on an as-needed basis.
+ * Helper class for casting native PHP types to Cypher-DSL types. Casts are added to this class on an as-needed basis.
  *
- * @internal This trait is not covered by the backwards compatibility guarantee of php-cypher-dsl
+ * @internal This class is not covered by the backwards compatibility guarantee of php-cypher-dsl
  */
-trait CastTrait
+abstract class Cast
 {
     use ErrorTrait;
 
@@ -36,7 +37,7 @@ trait CastTrait
      *
      * @param ListType|mixed[] $list
      */
-    private static function toListType($list): ListType
+    final public static function toListType($list): ListType
     {
         self::assertClass('list', [ListType::class, 'array'], $list);
 
@@ -48,7 +49,7 @@ trait CastTrait
      *
      * @param MapType|mixed[] $map
      */
-    private static function toMapType($map): MapType
+    final public static function toMapType($map): MapType
     {
         self::assertClass('map', [MapType::class, 'array'], $map);
 
@@ -60,7 +61,7 @@ trait CastTrait
      *
      * @param string|StringType $string
      */
-    private static function toStringType($string): StringType
+    final public static function toStringType($string): StringType
     {
         self::assertClass('string', [StringType::class, 'string'], $string);
 
@@ -72,7 +73,7 @@ trait CastTrait
      *
      * @param float|int|NumeralType $numeral
      */
-    private static function toNumeralType($numeral): NumeralType
+    final public static function toNumeralType($numeral): NumeralType
     {
         self::assertClass('numeral', [NumeralType::class, 'int', 'float'], $numeral);
 
@@ -85,7 +86,7 @@ trait CastTrait
      *
      * @param int|IntegerType $integer
      */
-    private static function toIntegerType($integer): IntegerType
+    final public static function toIntegerType($integer): IntegerType
     {
         self::assertClass('integer', [IntegerType::class, 'int'], $integer);
 
@@ -97,7 +98,7 @@ trait CastTrait
      *
      * @param bool|BooleanType $boolean
      */
-    private static function toBooleanType($boolean): BooleanType
+    final public static function toBooleanType($boolean): BooleanType
     {
         self::assertClass('boolean', [BooleanType::class, 'bool'], $boolean);
 
@@ -109,7 +110,7 @@ trait CastTrait
      *
      * @param bool|float|int|PropertyType|string $property
      */
-    private static function toPropertyType($property): PropertyType
+    final public static function toPropertyType($property): PropertyType
     {
         self::assertClass('property', [PropertyType::class, 'bool', 'int', 'float', 'string'], $property);
 
@@ -122,7 +123,7 @@ trait CastTrait
      *
      * @param Pattern|StructuralType $structure
      */
-    private static function toStructuralType($structure): StructuralType
+    final public static function toStructuralType($structure): StructuralType
     {
         self::assertClass('structure', [Pattern::class, StructuralType::class], $structure);
 
@@ -134,9 +135,9 @@ trait CastTrait
      *
      * @param Pattern|string|Variable $variable
      *
-     * @see CastTrait::toName() for a function that does not accept Pattern
+     * @see Cast::toName() for a function that does not accept Pattern
      */
-    private static function toVariable($variable): Variable
+    final public static function toVariable($variable): Variable
     {
         self::assertClass('variable', [Variable::class, Pattern::class, 'string'], $variable);
 
@@ -156,9 +157,9 @@ trait CastTrait
      *
      * @param string|Variable $name
      *
-     * @see CastTrait::toVariable() for a function that accepts Pattern
+     * @see Cast::toVariable() for a function that accepts Pattern
      */
-    private static function toName($name): Variable
+    final public static function toName($name): Variable
     {
         self::assertClass('name', [Variable::class, 'string'], $name);
 
@@ -170,7 +171,7 @@ trait CastTrait
      *
      * @param AnyType|bool|float|int|mixed[]|Pattern|string $value
      */
-    private static function toAnyType($value): AnyType
+    final public static function toAnyType($value): AnyType
     {
         self::assertClass('value', [AnyType::class, Pattern::class, 'int', 'float', 'string', 'bool', 'array'], $value);
 
